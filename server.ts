@@ -12,7 +12,11 @@ interface Message {
 
 // In-memory data store for messages
 const messages: Map<string, Message> = new Map()
-let idCounter = 0
+
+// Generate unique ID
+function generateId(): string {
+  return `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`
+}
 
 // Declare a route
 server.get('/', async function handler (request, reply) {
@@ -28,7 +32,7 @@ server.post<{ Body: { content: string } }>('/messages', async (request, reply) =
     return { error: 'Content is required and must be a non-empty string' }
   }
   
-  const id = `${Date.now()}-${idCounter++}`
+  const id = generateId()
   const timestamp = new Date().toISOString()
   const message: Message = {
     id,

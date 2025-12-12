@@ -1,6 +1,6 @@
 import Fastify from 'fastify'
 
-// Message interface
+// Create a Fastify server instance for testing
 const createServer = () => {
   const server = Fastify({ logger: false })
 
@@ -12,8 +12,10 @@ const createServer = () => {
     return { hello: 'world' }
   })
 
-  // ID counter to ensure unique IDs
-  let idCounter = 0
+  // Generate unique ID
+  const generateId = () => {
+    return `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`
+  }
 
   // CREATE - POST /messages
   server.post('/messages', async (request, reply) => {
@@ -24,7 +26,7 @@ const createServer = () => {
       return { error: 'Content is required and must be a non-empty string' }
     }
     
-    const id = `${Date.now()}-${idCounter++}`
+    const id = generateId()
     const timestamp = new Date().toISOString()
     const message = {
       id,
